@@ -1,0 +1,23 @@
+
+
+.globalFooter {
+  padding: 0 16px;
+  margin: 48px 0 24px 0;
+  text-align: center;
+}
+
+ 
+.globalFooter .links {
+    margin-bottom: 8px;
+}
+ 
+.globalFooter .links a {
+      color: #ccc;
+      transition: all 0.3s;
+  }
+
+  .globalFooter .copyright {
+    color: #666;
+    font-size: 12px;
+  }
+

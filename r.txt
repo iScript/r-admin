@@ -1,0 +1,10 @@
+css模块化：
+需修改 /node_modules/react-script/config/webpack
+importLoaders: 1,
+modules: true
+
+不模块化加载样式
+import  './PageHeaderLayout.css';
+
+模块化加载样式
+import style from './PageHeaderLayout.css';
