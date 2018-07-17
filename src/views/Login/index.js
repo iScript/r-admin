@@ -18,8 +18,14 @@ const copyright = (
 
 class Login extends React.Component {
 
+    componentDidMount(){
+        //console.log(this.props)
+    }
+
 
     render() {
+    
+        
         return (
             
             <div className="container login">
@@ -35,7 +41,7 @@ class Login extends React.Component {
                     </div>
                     
                     <div className="main">
-                        <CreateForm />
+                        <CreateForm {...this.props}  />
                     </div>
                    
 
@@ -58,15 +64,17 @@ const CreateForm = Form.create()(props => {
         props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                axios.post("http://127.0.0.1:8000/admin/login",values).then(function (response) {
+                axios.post("http://127.0.0.1:8000/admin/login",values).then( (response) => {
                     // handle success
                     //console.log(response);
                     if(response.data.code == 0){
                         localStorage.setItem("user",JSON.stringify(response.data.data))
                         
+                        console.log(props)
+                        props.history.push("/dashboard")
                         //const {history} = props;
                         //history.replace("/dashboard")
-                        window.location="#/dashboard";
+                        //window.location="#/dashboard";
                     }
                     
                 });

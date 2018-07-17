@@ -1,6 +1,6 @@
 import React , {Fragment} from "react";
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Row,Col,Card,Form,Input,Switch,Icon,Button,Upload,Menu,InputNumber,DatePicker,Modal,message,
+import {Row,Col,Card,Form,Input,TreeSelect,Icon,Button,Upload,Menu,InputNumber,DatePicker,Modal,message,
     Badge,Divider,Table
 } from 'antd';
 
@@ -14,12 +14,8 @@ class MyForm extends React.Component {
     okHandle = () => {
         this.props.form.validateFields((err, values) => {
             if (err) return;
-            
             this.props.handleFormCreateOrUpdate(values)
-            
             this.props.form.resetFields();
-
-            
         });
     };
     
@@ -27,15 +23,14 @@ class MyForm extends React.Component {
         const { modalVisible, form, formType, handleModalVisible } = this.props;
         return (
             <Modal title="表单"  visible={modalVisible} onOk={this.okHandle} onCancel={() => handleModalVisible()}>
-                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="店铺名称">
+                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="分类名称">
                     {form.getFieldDecorator('name', {
-                        rules: [{ required: true, message: '请输入店铺名称' }],
+                        rules: [{ required: true, message: '请输入分类名称' }],
                         //initialValue:props.formData.name
                     })(<Input placeholder="请输入" />)}
                 </FormItem>
-                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="店铺logo">
+                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="分类logo">
                     {form.getFieldDecorator('image', {
-                        rules: [{ required: true, message: '请上传图片' }],
                         getValueFromEvent: (e) => {
                             console.log(e)
                             if(e.file.response && e.file.response.code ==200 ){
@@ -46,32 +41,23 @@ class MyForm extends React.Component {
                     })( 
                         //
                         <Upload name="upload_file" action="http://localhost:8000/v1/qiniu/upload" showUploadList={false}>
-                           
                             {this.props.form.getFieldValue("image") ? <img src={this.props.form.getFieldValue("image")} width="50px" height="50px" /> : <Button><Icon type="upload" /> 上传</Button>}
-
                         </Upload>
                     )}
                 </FormItem>
-                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="精度">
-                    {form.getFieldDecorator('longitude', {
+                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="父分类">
+                    {form.getFieldDecorator('pid', {
                     rules: [{ required: true, message: '' }],
-                    })(<Input placeholder="" />)}
+                    })(
+                        <TreeSelect
+                            style={{ width: 300 }}
+                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                            treeData={this.props.category}
+                            placeholder="请选择"
+                        />
+                    )}
                 </FormItem>
-                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="纬度">
-                    {form.getFieldDecorator('latitude', {
-                    rules: [{ required: true, message: '' }],
-                    })(<Input placeholder="" />)}
-                </FormItem>
-                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="起送费">
-                    {form.getFieldDecorator('start_delivery_price', {
-                    rules: [{ required: true, message: '' }],
-                    })(<Input placeholder="" />)}
-                </FormItem>
-                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="状态">
-                    {form.getFieldDecorator('status', {
-                        valuePropName: 'checked',
-                    })(<Switch />)}
-                </FormItem>
+                
                 
 
             </Modal>
@@ -87,8 +73,8 @@ class GoodsCategory extends React.Component {
         listData:[],
         page:1,
         pageTotal : 10,
-        test:9,
         modalVisible: false,
+        category:[],
 
         formType:1 , //1新增 2修改
         updateId:0  //修改id
@@ -98,6 +84,7 @@ class GoodsCategory extends React.Component {
 
     componentDidMount() {
         this.loadData()
+        
     }
 
     //表单显示或隐藏
@@ -113,41 +100,72 @@ class GoodsCategory extends React.Component {
         });
     }
 
+    changeCategoryJson = (data) =>{
+        var arr = [{title:"顶级分类",value:"0",key:0}];
+        data.forEach(o => {
+            var o1 = {};
+            o1.key = o.id;
+            o1.value = o.id+"";
+            o1.title = o.name;
+            if(o.children && o.children.length>0){
+                var arr2 = [];
+                o.children.forEach(j =>{
+                    var j1 = {};
+                    j1.key = j.id;
+                    j1.value = j.id+"";
+                    j1.title = j.name;
+                    arr2.push(j1)
+                })
+                o1.children = arr2;
+            }
+            arr.push(o1)
+        });
+        
+        return arr;
+    }
+
     //获取数据
     loadData = () => {
-        httpManager.getShopList(this.state.page).then((response) => {
-            this.setState({"listData":response.data.data.data,pageTotal:response.data.data.total});
+        httpManager.getGoodsCategoryList(this.state.page).then((response) => {
+            
+            
+            var arr = this.changeCategoryJson(response.data.data.data)
+            console.log(arr)
+            this.setState({"listData":response.data.data.data,pageTotal:response.data.data.total,category:arr});
+           // console.log(this.state.category)
         })
+        
     }
 
     //点击删除
     handleDelete = (record) =>{
         if(window.confirm("确认删除？")){
-            httpManager.deleteShop(record.id).then( (response)=>{
-                if(response.data.code == 0){
-                    this.loadData()
-                }
+            httpManager.deleteGoodsCategory(record.id).then( (response)=>{
+                if(response.data.code != 0){alert(response.data.message);return;}
+                this.loadData()
             } )
         }
     }
 
     //点击修改
     handleUpdate = (record) =>{
+        
         this.setState({modalVisible:true,formType:2,updateId:record.id})
-        record.status = record.status == 1 ? true : false;
+        record.pid = record.pid+""
+        console.log(record);
         this.form.props.form.setFieldsValue(record);
     }
 
     //处理修改或新增
     handleFormCreateOrUpdate = (data) => {
-        data.status = (data.status == true)?1:0;
+        
         console.log(data);
         if(this.state.formType == 2 ){
-            httpManager.updateShop(this.state.updateId,data).then((response)=>{
+            httpManager.updateGoodsCategory(this.state.updateId,data).then((response)=>{
                 this.handleModalVisible(false);this.loadData();
             });
         }else{
-            httpManager.createShop(data).then((response)=>{
+            httpManager.createGoodsCategory(data).then((response)=>{
                 this.handleModalVisible(false);this.loadData();
             });
         }  
@@ -161,7 +179,7 @@ class GoodsCategory extends React.Component {
                 dataIndex: 'id',
             },
             {
-                title: '店铺名称',
+                title: '分类名称',
                 dataIndex: 'name',
                 
             },
@@ -173,11 +191,8 @@ class GoodsCategory extends React.Component {
                 }
             },
             {
-                title: '状态',
-                dataIndex: 'status',
-                render(val) {
-                    return <Badge status={val==1 ? 'success' : 'error'} text={val==1 ? '开启中' : '关闭'} />;
-                }
+                title: '排序',
+                dataIndex: 'sort',
                 
             },
             {
@@ -201,7 +216,18 @@ class GoodsCategory extends React.Component {
         return (
             
             <PageHeaderLayout title="商品分类">
-               
+                <Card bordered={false}>
+                    <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields() } }>新建</Button>
+                
+                    <Table
+                        dataSource={this.state.listData}
+                        columns={columns}
+                        rowKey="id"
+                        indentSize={35}
+                        pagination={{total:this.state.pageTotal,onChange:this.onPageChange}}
+                    />
+                </Card>
+                <CreateForm  {...parentMethods} category={this.state.category}  modalVisible={this.state.modalVisible} wrappedComponentRef={(form) => this.form = form} />
             </PageHeaderLayout>
 
         );

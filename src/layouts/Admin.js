@@ -22,9 +22,7 @@ class Admin extends React.Component {
 
     constructor(){
         super()
-        if(!localStorage.user ){
-            window.location = "#/login"
-        }
+        //console.log("super",this.props)
     }
 
     handleMenuCollapse = collapsed => {
@@ -34,10 +32,10 @@ class Admin extends React.Component {
 
     componentWillMount(){
        
-        
+        console.log("will go");
         // 临时先这样处理
         if(!localStorage.user){
-            console.log("will go")
+            
             const {history} = this.props;
             history.replace("/login")
 
@@ -48,6 +46,8 @@ class Admin extends React.Component {
         
        
     }
+
+    
 
     componentDidMount(){
        
@@ -75,7 +75,7 @@ class Admin extends React.Component {
                         {adminRoutes.map((prop, key) => {
                             if (prop.redirect)
                                 return <Redirect from={prop.path} to={prop.to} key={key} />;
-                            return <Route path={prop.path} component={prop.component} key={key} />;
+                            return <Route  path={prop.path} component={prop.component} key={key} />;
                         })}
                         </Switch>
                     </Content>

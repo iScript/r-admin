@@ -14,7 +14,11 @@ class GHeader extends PureComponent {
     };
 
     handleMenuClick = (key) => {
-        console.log(999)
+        console.log(key)
+        if(key.key == "logout"){
+            localStorage.clear();
+            this.props.history.push("/login");
+        }
     }
 
     render() {
@@ -38,7 +42,7 @@ class GHeader extends PureComponent {
                 </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item key="logout">
-                <Icon type="logout" />退出登录
+                    <Icon type="logout" />退出登录
                 </Menu.Item>
             </Menu>
         );
