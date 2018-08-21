@@ -1,0 +1,37 @@
+.test{
+    color:white;
+}
+
+.goods_list_box{
+    width:100%;
+    min-height: 100px;
+    clear:both;
+}
+
+.goods_list_box li{
+    list-style: none;
+    width:100%;
+    min-height:50px;
+    padding:5px;
+    border-bottom:1px solid #eee;
+}
+
+.goods_list_box .goods_img{
+    width:40px;
+    height: 40px;
+    float:left;
+}
+
+.goods_list_box .goods_r{
+    float:right;
+}
+
+.goods_list_box .goods_title{
+    margin:0;
+}
+
+.goods_list_box .goods_price{
+    color:red;
+    margin:0;
+
+}

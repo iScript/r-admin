@@ -2,18 +2,18 @@ import React from "react";
 
 
 
-class Test extends React.Component {
+class Index extends React.Component {
 
     render() {
         
         return (
             
             <div>
-                test
+                Index
             </div>
 
         );
     }
 }
 
-export default Test;
+export default Index;

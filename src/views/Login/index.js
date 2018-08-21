@@ -72,6 +72,9 @@ const CreateForm = Form.create()(props => {
                         
                         console.log(props)
                         props.history.push("/dashboard")
+                        //window.location.href = "#/dashboard"
+
+
                         //const {history} = props;
                         //history.replace("/dashboard")
                         //window.location="#/dashboard";
