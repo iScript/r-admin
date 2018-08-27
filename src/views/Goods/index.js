@@ -6,6 +6,7 @@ import {Row,Col,Card,Form,Input,TreeSelect,Icon,Button,Upload,Switch,InputNumber
 
 import httpManager from "../../common/httpManager.js"
 import F from "../../common/F.js"
+import config from "../../common/config.js"
 const FormItem = Form.Item;
 
 
@@ -49,6 +50,7 @@ class MyForm extends React.Component {
     
     render() {
         const { modalVisible, form, formType, handleModalVisible } = this.props;
+        const upload_url = config.base_host + "/v1/qiniu/upload";
         //var fileList = [];
         return (
             <Modal title="表单"  visible={modalVisible} onOk={this.okHandle} onCancel={() => handleModalVisible()}>
@@ -75,7 +77,7 @@ class MyForm extends React.Component {
                         },
                     })( 
                         //
-                        <Upload name="upload_file" action="http://localhost:8000/v1/qiniu/upload" showUploadList={false}>
+                        <Upload name="upload_file" action={upload_url} showUploadList={false}>
                             {this.props.form.getFieldValue("picture") ? <img src={this.props.form.getFieldValue("picture")} width="50px" height="50px" /> : <Button><Icon type="upload" /> 上传</Button>}
                         </Upload>
                     )}
@@ -150,7 +152,7 @@ class MyForm extends React.Component {
                         //
                         <Upload name="upload_file" fileList={ 
                            this.state.fileList } 
-                         listType="picture-card" action="http://localhost:8000/v1/qiniu/upload" >
+                         listType="picture-card" action={upload_url} >
                             <Button><Icon type="upload" /> 上传</Button>
                         </Upload>
                     )}

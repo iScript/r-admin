@@ -5,6 +5,8 @@ import {Row,Col,Card,Form,Input,Switch,Icon,Button,Upload,Menu,InputNumber,DateP
 } from 'antd';
 
 import httpManager from "../../common/httpManager.js"
+import config from "../../common/config.js"
+
 const FormItem = Form.Item;
 
 
@@ -25,6 +27,8 @@ class MyForm extends React.Component {
     
     render() {
         const { modalVisible, form, formType, handleModalVisible } = this.props;
+        const upload_url = config.base_host + "/v1/qiniu/upload";
+
         return (
             <Modal title="表单"  visible={modalVisible} onOk={this.okHandle} onCancel={() => handleModalVisible()}>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="店铺名称">
@@ -45,7 +49,7 @@ class MyForm extends React.Component {
                         },
                     })( 
                         //
-                        <Upload name="upload_file" action="http://localhost:8000/v1/qiniu/upload" showUploadList={false}>
+                        <Upload name="upload_file" action={upload_url} showUploadList={false}>
                            
                             {this.props.form.getFieldValue("image") ? <img src={this.props.form.getFieldValue("image")} width="50px" height="50px" /> : <Button><Icon type="upload" /> 上传</Button>}
 

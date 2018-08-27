@@ -1,6 +1,7 @@
 import axios from "axios";
+import config from "./config.js"
 
-var host = "http://localhost:8000";
+var host = config.base_host;
 
 var getToken = function(){
     console.log(typeof localStorage.user,localStorage.user)
