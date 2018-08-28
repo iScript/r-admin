@@ -1,5 +1,5 @@
 const C = {
-    base_host : "http://localhost:8000"
+    base_host : "http://em.max06.com"
 }
 
 export default C;
