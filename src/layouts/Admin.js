@@ -30,6 +30,15 @@ class Admin extends React.Component {
         this.setState({collapsed:!this.state.collapsed});
     };
 
+    handleMenuClick = (key) => {
+        console.log(key)
+        if(key.key == "logout"){
+            localStorage.clear();
+            console.log(this.props)
+            this.props.history.push("/login");
+        }
+    }
+
     componentWillMount(){
        
         console.log("will go");
@@ -68,6 +77,7 @@ class Admin extends React.Component {
                             isMobile={false}
                             collapsed={this.state.collapsed}
                             onCollapse={this.handleMenuCollapse}
+                            handleMenuClick={this.handleMenuClick}
                         />
                     </Header>
                     <Content style={{ margin: '24px 24px 0', height: '100%' }}>

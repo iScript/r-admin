@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
-import { Link  } from 'react-router-dom';
+import { Link ,Switch , Route , Redirect } from 'react-router-dom';
+
 
 import "./index.css";
 
@@ -13,13 +14,14 @@ class GHeader extends PureComponent {
         // this.triggerResizeEvent();
     };
 
-    handleMenuClick = (key) => {
-        console.log(key)
-        if(key.key == "logout"){
-            localStorage.clear();
-            this.props.history.push("/login");
-        }
-    }
+    // handleMenuClick = (key) => {
+    //     console.log(key)
+    //     if(key.key == "logout"){
+    //         localStorage.clear();
+    //         console.log(this.props)
+    //         this.props.history.push("/login");
+    //     }
+    // }
 
     render() {
         const {
@@ -33,7 +35,7 @@ class GHeader extends PureComponent {
         } = this.props;
 
         const menu = (
-            <Menu className="menu" selectedKeys={[]} onClick={this.handleMenuClick}>
+            <Menu className="menu" selectedKeys={[]} onClick={this.props.handleMenuClick}>
                 <Menu.Item disabled>
                 <Icon type="user" />个人中心
                 </Menu.Item>
