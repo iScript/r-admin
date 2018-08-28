@@ -5,6 +5,7 @@ import {Row,Col,Card,Form,Input,Select,Icon,Button,Dropdown,Menu,InputNumber,Dat
 } from 'antd';
 import axios from 'axios';
 import GFooter from "../../components/GFooter"
+import config from "../../common/config.js"
 import logo from '../../assets/logo.svg';
 import "./index.css";
 import { userInfo } from 'os';
@@ -64,7 +65,7 @@ const CreateForm = Form.create()(props => {
         props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                axios.post("http://127.0.0.1:8000/admin/login",values).then( (response) => {
+                axios.post(config.base_host+"/admin/login",values).then( (response) => {
                     // handle success
                     //console.log(response);
                     if(response.data.code == 0){
