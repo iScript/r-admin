@@ -60,6 +60,12 @@ class MyForm extends React.Component {
                         />
                     )}
                 </FormItem>
+                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="商品排序">
+                    {form.getFieldDecorator('sort', {
+                        rules: [{ required: true, message: '请输入' }],
+                        //initialValue:props.formData.name
+                    })(<InputNumber min={0} placeholder="请输入" />)}
+                </FormItem>
                 
                 
 

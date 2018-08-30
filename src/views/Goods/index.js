@@ -102,7 +102,7 @@ class MyForm extends React.Component {
                 </FormItem>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="促销价格">
                     {form.getFieldDecorator('promotion_price', {
-                        rules: [{ required: true, message: '请输入' }],
+                        rules: [],
                         //initialValue:props.formData.name
                     })(<InputNumber min={0}  step={0.01} placeholder="请输入" />)}
                 </FormItem>
