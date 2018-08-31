@@ -136,6 +136,21 @@ class MyForm extends React.Component {
                         //initialValue:props.formData.name
                     })(<Input placeholder="请输入" />)}
                 </FormItem>
+                
+                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="重量说明">
+                    {form.getFieldDecorator('extra_4', {
+                        rules: [{}],
+                        //initialValue:props.formData.name
+                    })(<Input placeholder="请输入" />)}
+                </FormItem>
+                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="送到时间说明">
+                    {form.getFieldDecorator('extra_5', {
+                        rules: [{}],
+                        //initialValue:props.formData.name
+                    })(<Input placeholder="请输入" />)}
+                </FormItem>
+
+
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="详情图片">
                     {form.getFieldDecorator('img_id_array', {
                         getValueFromEvent: (e) => {
