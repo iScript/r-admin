@@ -56,7 +56,7 @@ class Order extends React.Component {
         console.log(record)
         var orderDetail = record.address;
         orderDetail.goodsList = JSON.parse(record.detail).data;
-
+        console.log(orderDetail)
         this.setState({modalVisible: true,orderDetail:orderDetail});
     }
 
