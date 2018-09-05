@@ -128,7 +128,7 @@ class MyForm extends React.Component {
                     {form.getFieldDecorator('extra_2', {
                         rules: [{ required: true, message: '请输入' }],
                         //initialValue:props.formData.name
-                    })(<Input placeholder="请输入" />)}
+                    })(<Input placeholder="请输入" value="1111"	/>)}
                 </FormItem>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="保质期">
                     {form.getFieldDecorator('extra_3', {
@@ -354,7 +354,7 @@ class Goods extends React.Component {
             
             <PageHeaderLayout title="商品管理">
                 <Card bordered={false}>
-                    <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields() } }>新建</Button>
+                    <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields(); this.form.props.form.setFieldsValue({stock:"500",sort:"0",extra_1:"500g",extra_2:"冷藏",extra_3:"7天"}); } }>新建</Button>
                 
                     <Table
                         dataSource={this.state.listData}

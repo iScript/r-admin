@@ -98,6 +98,7 @@ class Order extends React.Component {
                 title: '状态',
                 render: (text, record, index) => {
                     if(text.status == -1) return <span>失效</span>
+                    if(text.status == 0) return <span>待支付</span>
                     if(text.status == 1) return (<Fragment><span>已支付</span> <a href="javascript:;" onClick={this.handleCompleteOrder.bind(this,record)} >完成发货</a></Fragment>)
                     if(text.status == 2) return <span>已完成</span>
                     return <span>未知</span>
