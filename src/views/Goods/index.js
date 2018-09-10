@@ -128,7 +128,7 @@ class MyForm extends React.Component {
                     {form.getFieldDecorator('extra_2', {
                         rules: [{ required: true, message: '请输入' }],
                         //initialValue:props.formData.name
-                    })(<Input placeholder="请输入" value="1111"	/>)}
+                    })(<Input placeholder="请输入" 	/>)}
                 </FormItem>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="保质期">
                     {form.getFieldDecorator('extra_3', {
@@ -206,6 +206,7 @@ class Goods extends React.Component {
         pageTotal : 10,
         modalVisible: false,
         category:[],
+        param_str:"",
 
         formType:1 , //1新增 2修改
         updateId:0  //修改id
@@ -264,7 +265,7 @@ class Goods extends React.Component {
 
     //获取数据
     loadData = () => {
-        httpManager.getGoodsList(this.state.page).then((response) => {
+        httpManager.getGoodsList(this.state.page,this.state.param_str).then((response) => {
             if(!F.checkResponse(response)) return;
 
             this.setState({"listData":response.data.data.data,pageTotal:response.data.data.total});
@@ -359,8 +360,20 @@ class Goods extends React.Component {
             
             <PageHeaderLayout title="商品管理">
                 <Card bordered={false}>
-                    <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields(); this.form.props.form.setFieldsValue({stock:"500",sort:"0",extra_1:"500g",extra_2:"冷藏",extra_3:"7天"}); } }>新建</Button>
-                
+                    <Row>
+                        <Col span={4}>
+                            <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields(); this.form.props.form.setFieldsValue({stock:"500",sort:"0",extra_1:"500g",extra_2:"冷藏",extra_3:"7天"}); } }>新建</Button>
+                        </Col>
+                        <Col span={20}>
+                            <Input.Search style={{width:'200px'}}
+                            placeholder="搜索"
+                            onSearch={(value) => {this.setState({param_str:"keyword="+value},()=> {
+                                this.loadData()
+                            }) }}
+                            enterButton
+                            />
+                        </Col>
+                    </Row>
                     <Table
                         dataSource={this.state.listData}
                         columns={columns}

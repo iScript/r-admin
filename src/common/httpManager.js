@@ -28,7 +28,7 @@ const  httpManager = {
     deleteGoodsCategory: (id) => http.delete(host+"/admin/goods_category/"+id,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
     updateGoodsCategory: (id,data) => http.put(host+"/admin/goods_category/"+id,data,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
 
-    getGoodsList : (page=1) => http.get(host+"/admin/goods?page="+page,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
+    getGoodsList : (page=1,extra='') => http.get(host+"/admin/goods?page="+page+"&"+extra,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
     createGoods: (data) => http.post(host+"/admin/goods",data,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
     deleteGoods: (id) => http.delete(host+"/admin/goods/"+id,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
     updateGoods: (id,data) => http.put(host+"/admin/goods/"+id,data,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
