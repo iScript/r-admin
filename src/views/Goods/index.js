@@ -182,6 +182,11 @@ class MyForm extends React.Component {
                         valuePropName: 'checked',
                     })(<Switch />)}
                 </FormItem>
+                <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="是否上架">
+                    {form.getFieldDecorator('state', {
+                        valuePropName: 'checked',
+                    })(<Switch />)}
+                </FormItem>
                 
 
                 
