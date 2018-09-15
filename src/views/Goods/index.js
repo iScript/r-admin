@@ -334,6 +334,13 @@ class Goods extends React.Component {
                 dataIndex: 'stock'
             },
             {
+                title: '状态',
+                dataIndex: 'state',
+                render(val){
+                    return (val == 1) ? <span style={{color:"green"}}>上架中</span> : "下架中";
+                }
+            },
+            {
                 title: '排序',
                 dataIndex: 'sort',
                 
