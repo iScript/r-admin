@@ -59,7 +59,9 @@ class Admin extends React.Component {
     
 
     componentDidMount(){
-       
+       setInterval(function(){
+           console.log("111")
+       },2000)
     }
 
 

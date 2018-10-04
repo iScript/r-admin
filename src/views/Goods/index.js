@@ -167,7 +167,7 @@ class MyForm extends React.Component {
                         //
                         <Upload name="upload_file" fileList={ 
                            this.state.fileList } 
-                         listType="picture-card" action={upload_url} >
+                         listType="picture-card"  multiple={true} action={upload_url} >
                             <Button><Icon type="upload" /> 上传</Button>
                         </Upload>
                     )}
