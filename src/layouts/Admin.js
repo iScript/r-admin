@@ -64,13 +64,14 @@ class Admin extends React.Component {
            httpManager.orderStatus().then(response => {
                var d = response.data.data;
                var new_order = d.today_newest_order;
-               console.log(new_order)
+               console.log("check order new",new_order)
 
                if(new_order){
                     var tmp = localStorage.tmpo;
                     if(tmp && tmp == new_order.order_id) return;
-
-                    if(new_order.stauts == 1){
+                    console.log("check order new22",new_order.status)
+                    if(new_order.status == 1){
+                  
                         console.log("你有新订单。。。")
                         var audio = document.createElement("audio");
                         audio.src = "http://ojjzd9dod.bkt.clouddn.com/dingdong.mp3";
