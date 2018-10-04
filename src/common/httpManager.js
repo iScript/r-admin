@@ -34,6 +34,8 @@ const  httpManager = {
     updateGoods: (id,data) => http.put(host+"/admin/goods/"+id,data,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
 
     completeOrder:(order_id) => http.post(`${host}/admin/order/complete`,{order_id:order_id},{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
+    orderStatus:()=>http.get(`${host}/admin/order/status`,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
+    dashboard:()=>http.get(`${host}/admin/dashboard`,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
 
     // common
     getList : (model,page=1) => http.get(`${host}/admin/${model}?page=${page}`,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),

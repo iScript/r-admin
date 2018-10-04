@@ -10,6 +10,7 @@ import "../assets/index.css"
 
 import adminRoutes from "../routes/admin.js";
 import menuData from "../common/menu.js"
+import httpManager from "../common/httpManager.js"
 
 const { Content, Header, Footer } = Layout;
 
@@ -60,8 +61,26 @@ class Admin extends React.Component {
 
     componentDidMount(){
        setInterval(function(){
-           console.log("111")
-       },2000)
+           httpManager.orderStatus().then(response => {
+               var d = response.data.data;
+               var new_order = d.today_newest_order;
+               console.log(new_order)
+
+               if(new_order){
+                    var tmp = localStorage.tmpo;
+                    if(tmp && tmp == new_order.order_id) return;
+
+                    if(new_order.stauts == 1){
+                        console.log("你有新订单。。。")
+                        var audio = document.createElement("audio");
+                        audio.src = "http://ojjzd9dod.bkt.clouddn.com/dingdong.mp3";
+                        audio.play();
+                        localStorage.tmpo = new_order.order_id;
+
+                    }
+               }
+           })
+       },5000)
     }
 
 
