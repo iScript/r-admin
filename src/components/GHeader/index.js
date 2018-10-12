@@ -36,13 +36,13 @@ class GHeader extends PureComponent {
 
         const menu = (
             <Menu className="menu" selectedKeys={[]} onClick={this.props.handleMenuClick}>
-                <Menu.Item disabled>
-                <Icon type="user" />个人中心
+                <Menu.Item key="clear">
+                <Icon type="user" />清理缓存
                 </Menu.Item>
-                <Menu.Item disabled>
+                {/* <Menu.Item disabled>
                 <Icon type="setting" />设置
                 </Menu.Item>
-                <Menu.Divider />
+                <Menu.Divider /> */}
                 <Menu.Item key="logout">
                     <Icon type="logout" />退出登录
                 </Menu.Item>
@@ -67,10 +67,10 @@ class GHeader extends PureComponent {
                 />
 
                 <div className="right">
-                    <Tooltip title="使用文档">
+                    <Tooltip title="使用说明请联系技术">
                         <a
                         target="_blank"
-                        href="http://pro.ant.design/docs/getting-started"
+                        href="#"
                         rel="noopener noreferrer"
                         className="action"
                         >

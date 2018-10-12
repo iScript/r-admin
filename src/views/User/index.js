@@ -73,14 +73,8 @@ class User extends React.Component {
                 
             },
             {
-                title: '操作',
-                render: (text, record, index) => (
-                    
-                  <Fragment>
-                    <a href="javascript:;"  >查看</a>
-                    
-                  </Fragment>
-                ),
+                title: '登录ip',
+                dataIndex: 'last_login_ip',
             },
         ]
 

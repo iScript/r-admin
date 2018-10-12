@@ -38,6 +38,9 @@ class Admin extends React.Component {
             console.log(this.props)
             this.props.history.push("/login");
         }
+        if(key.key == "clear"){
+            alert("清理成功")
+        }
     }
 
     componentWillMount(){

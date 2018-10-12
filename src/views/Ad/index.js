@@ -219,7 +219,7 @@ class Ad extends React.Component {
 
         return (
             
-            <PageHeaderLayout title="商品管理">
+            <PageHeaderLayout title="广告管理">
                 <Card bordered={false}>
                     <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields() } }>新建</Button>
                 
