@@ -310,6 +310,16 @@ class Goods extends React.Component {
         }  
     }
 
+    handlePriceUpdate = (record,e) => {
+        console.log(e.target.value,record)
+       
+        httpManager.updateGoods(e.target.id,{price:e.target.value}).then((response)=>{
+            
+            if(response.data.code != 0){alert(response.data.message);return;}
+            this.loadData()
+        }) 
+    }
+
     //
     render() {
         const columns = [
@@ -328,6 +338,14 @@ class Goods extends React.Component {
                 render(val){
                     return <img src={val} width="50px" height="50px" />
                 }
+            },
+            {
+                title: '价格',
+                dataIndex: 'price',
+                render : (text, record, index) => (
+                    
+                    <Input defaultValue={text} id={record.id} onBlur={ this.handlePriceUpdate.bind(this,record) } />
+                )
             },
             {
                 title: '库存',

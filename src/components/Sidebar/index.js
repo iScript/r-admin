@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon,Drawer } from 'antd';
 import { Link } from 'react-router-dom';
 
 import  "./index.css";
@@ -96,7 +96,7 @@ class Sidebar extends React.Component {
     
 
     render() {
-        const { logo , collapsed } = this.props;
+        const { logo , collapsed ,onCollapse } = this.props;
 
         return (
             
@@ -118,7 +118,7 @@ class Sidebar extends React.Component {
                     {this.getNavMenuItems(this.menus)}
                 </Menu>
             </Sider>
-
+               
         );
     }
 }

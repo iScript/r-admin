@@ -7,7 +7,7 @@ import { Layout, Icon, message } from 'antd';
 import 'antd/dist/antd.css'; 
 import logo from '../assets/logo.svg';
 import "../assets/index.css"
-
+import { enquireScreen, unenquireScreen } from 'enquire-js';
 import adminRoutes from "../routes/admin.js";
 import menuData from "../common/menu.js"
 import httpManager from "../common/httpManager.js"
@@ -17,7 +17,7 @@ const { Content, Header, Footer } = Layout;
 class Admin extends React.Component {
 
     state = {
-        isMobile:true,
+        isMobile:false,
         collapsed:false //是否收缩
     };
 
@@ -63,7 +63,28 @@ class Admin extends React.Component {
     
 
     componentDidMount(){
-       setInterval(function(){
+        console.log("dddddd")
+        
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            console.log("手机访问")
+            this.setState({
+                isMobile: true,
+            });
+        }
+        
+        // enquireScreen(mobile => {
+        //     console.log(mobile,"dddddd")
+        //     const { isMobile } = this.state;
+        //     if (isMobile !== mobile) {
+        //       this.setState({
+        //         isMobile: mobile,
+        //       });
+        //     }
+        // });
+        
+        
+        // 订单语音
+        setInterval(function(){
            httpManager.orderStatus().then(response => {
                var d = response.data.data;
                var new_order = d.today_newest_order;
@@ -87,13 +108,20 @@ class Admin extends React.Component {
        },5000)
     }
 
+    componentWillUnmount() {
+        //cancelAnimationFrame(this.renderRef);
+        unenquireScreen(this.enquireHandler);
+    }
+
+
+
 
     render() {
-        
+        const { isMobile } = this.state;
         return (
             
             <Layout>
-                <Sidebar logo={logo} collapsed={this.state.collapsed} menuData={menuData} />
+                <Sidebar logo={logo} collapsed={this.state.collapsed} menuData={menuData} isMobile={isMobile} />
                 
                 <Layout>
                     <Header style={{ padding: 0 }}>

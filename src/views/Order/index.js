@@ -31,6 +31,11 @@ class Order extends React.Component {
     }
 
 
+    getToken = function(){
+        console.log(typeof localStorage.user,localStorage.user)
+        return (typeof localStorage.user != "undefined" ) ? JSON.parse(localStorage.user).token : "";
+    }   
+
 
     //分页变化
     onPageChange = (page,pagesize) => {
@@ -55,6 +60,8 @@ class Order extends React.Component {
     handleShowOrderDetail = (record) =>{
         console.log(record)
         var orderDetail = record.address;
+        orderDetail.order_id = record.order_id
+        orderDetail.beizhu = record.extra1;
         orderDetail.goodsList = JSON.parse(record.detail).data;
         console.log(orderDetail)
         this.setState({modalVisible: true,orderDetail:orderDetail});
@@ -125,12 +132,18 @@ class Order extends React.Component {
 
         return (
             <div>
-                <Modal title="表单"  visible={this.state.modalVisible}  onCancel={() => this.handleModalVisible()}>
+                <Modal title="订单详情"  visible={this.state.modalVisible}  onCancel={() => this.handleModalVisible()} onOk={() => this.handleModalVisible()}>
+                    <p>订单id: {this.state.orderDetail.order_id }</p>
                     <p>联系人: {this.state.orderDetail.contact_name }</p>
                     <p>联系电话: {this.state.orderDetail.contact_number }</p>
                     <p>城市: {this.state.orderDetail.city}</p>
                     <p>详细地址: {this.state.orderDetail.address_1} {this.state.orderDetail.address_2} {this.state.orderDetail.house_number}</p>
+                    <p>备注: {this.state.orderDetail.beizhu}</p>
                     <GoodsList list={this.state.orderDetail.goodsList } />
+
+                    <Button  onClick={ ()=>{
+                        window.open("https://api2.mc8mc.com/admin/order/"+this.state.orderDetail.order_id+"/print?x-token="+this.getToken())
+                    } } >打印小票</Button>
                 </Modal>
 
 
