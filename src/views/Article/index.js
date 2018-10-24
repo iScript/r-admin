@@ -4,6 +4,12 @@ import {Row,Col,Card,Form,Input,Switch,Icon,Button,Upload,Menu,InputNumber,DateP
     Badge,Divider,Table
 } from 'antd';
 
+import BraftEditor from 'braft-editor'
+import 'braft-editor/dist/index.css'
+//record.content = BraftEditor.createEditorState(record.content)
+//data.content = data.content.toRAW()
+
+
 import httpManager from "../../common/httpManager.js"
 const FormItem = Form.Item;
 const xmodel = "article";
@@ -32,7 +38,7 @@ class MyForm extends React.Component {
         const { modalVisible, form, formType, handleModalVisible } = this.props;
         //var fileList = [];
         return (
-            <Modal title="表单"  visible={modalVisible} onOk={this.okHandle} onCancel={() => handleModalVisible()}>
+            <Modal title="表单"  visible={modalVisible} onOk={this.okHandle} onCancel={() => handleModalVisible()} width="800px"  >
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="标题">
                     {form.getFieldDecorator('title', {
                         rules: [{ required: true, message: '请输入标题' }],
@@ -49,7 +55,11 @@ class MyForm extends React.Component {
                     {form.getFieldDecorator('content', {
                         rules: [{ required: true, message: '请输入' }],
                         //initialValue:props.formData.name
-                    })(<Input.TextArea placeholder="请输入" />)}
+                    })(<BraftEditor
+                        controls={['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator', 'media' ]}
+                        media={{}}
+                        style={{width:"600px"}}
+                      />)}
                 </FormItem>
 
             </Modal>
@@ -111,17 +121,26 @@ class Article extends React.Component {
 
     //点击修改
     handleUpdate = (record) =>{
-        console.log(record);
+        console.log("record:",record);
         this.setState({modalVisible:true,formType:2,updateId:record.id})
+        
        
-        this.form.props.form.setFieldsValue(record);
+       var record2 = record;
+        record2.content = BraftEditor.createEditorState(record2.content)
+        console.log(this.form)
+        
+        this.form.props.form.setFieldsValue(record2,function(){
+            //re
+            record2.content = record.content.toHTML()
+        });
 
     }
 
     //处理修改或新增
     handleFormCreateOrUpdate = (data) => {
-        
-        console.log(data);
+        console.log(data)
+        data.content = data.content.toHTML()
+        //console.log(data);return;
         if(this.state.formType == 2 ){
             httpManager.update(xmodel,this.state.updateId,data).then((response)=>{
                 this.handleModalVisible(false);this.loadData();
@@ -174,7 +193,9 @@ class Article extends React.Component {
             
             <PageHeaderLayout title="文章管理">
                 <Card bordered={false}>
-                    <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields() } }>新建</Button>
+                    <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields();this.form.props.form.setFieldsValue({
+        content: BraftEditor.createEditorState('')
+      }) } }>新建</Button>
                 
                     <Table
                         dataSource={this.state.listData}
