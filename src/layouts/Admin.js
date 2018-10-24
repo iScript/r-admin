@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar";
 import GHeader from "../components/GHeader";
 import GFooter from '../components/GFooter';
 import { Switch , Route , Redirect} from 'react-router-dom';
-import { Layout, Icon, message } from 'antd';
+import { Layout, Icon, message ,Modal,Input} from 'antd';
 import 'antd/dist/antd.css'; 
 import logo from '../assets/logo.svg';
 import "../assets/index.css"
@@ -11,6 +11,7 @@ import { enquireScreen, unenquireScreen } from 'enquire-js';
 import adminRoutes from "../routes/admin.js";
 import menuData from "../common/menu.js"
 import httpManager from "../common/httpManager.js"
+import F from "../common/F.js"
 
 const { Content, Header, Footer } = Layout;
 
@@ -18,7 +19,9 @@ class Admin extends React.Component {
 
     state = {
         isMobile:false,
-        collapsed:false //是否收缩
+        collapsed:false, //是否收缩
+        modalVisible: false,
+        newpass:''
     };
 
     constructor(){
@@ -26,10 +29,31 @@ class Admin extends React.Component {
         //console.log("super",this.props)
     }
 
+    
+     //表单显示或隐藏
+    handleModalVisible = flag => {
+        this.setState({modalVisible: !!flag,});
+    };
+
     handleMenuCollapse = collapsed => {
         console.log("admin collapse",this.state.collapsed)
         this.setState({collapsed:!this.state.collapsed});
     };
+
+    getUser = ()=>{
+        return (typeof localStorage.user != "undefined" ) ? JSON.parse(localStorage.user) : null;   
+    }
+
+    resetPasswordHandle = ()=>{
+        //console.log(111,this.getUser().id);return;
+        if(this.state.newpass == "") return;
+        httpManager.update("admin_user",this.getUser().id,{password:this.state.newpass}).then((response)=>{
+            if(!F.checkResponse(response)) return;
+            alert(response.data.message)
+            this.handleModalVisible(false)
+            this.setState({newpass:""})
+        });
+    }
 
     handleMenuClick = (key) => {
         console.log(key)
@@ -38,6 +62,11 @@ class Admin extends React.Component {
             console.log(this.props)
             this.props.history.push("/login");
         }
+        if(key.key == "password"){
+           
+            this.handleModalVisible(true)
+        }
+
         if(key.key == "clear"){
             alert("清理成功")
         }
@@ -85,7 +114,9 @@ class Admin extends React.Component {
         
         // 订单语音
         setInterval(function(){
-           httpManager.orderStatus().then(response => {
+            if(!this.getUser) return;
+           
+            httpManager.orderStatus().then(response => {
                var d = response.data.data;
                var new_order = d.today_newest_order;
                console.log("check order new",new_order)
@@ -164,6 +195,14 @@ class Admin extends React.Component {
                     </Footer>
                 </Layout>
                 
+                <Modal title="修改密码"  visible={this.state.modalVisible} onOk={this.resetPasswordHandle} onCancel={() => this.handleModalVisible()} >
+                    
+                    新密码：<Input placeholder="新密码" onChange={(e)=>{
+                        //console.log(this=)
+                        this.setState({newpass:e.target.value})
+                    }} />
+                </Modal>
+
                 
             </Layout>
     

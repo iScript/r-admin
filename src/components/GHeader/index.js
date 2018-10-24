@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
+import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip,Modal } from 'antd';
 import { Link ,Switch , Route , Redirect } from 'react-router-dom';
 
 
@@ -23,6 +23,9 @@ class GHeader extends PureComponent {
     //     }
     // }
 
+    
+
+
     render() {
         const {
             logo,
@@ -38,6 +41,9 @@ class GHeader extends PureComponent {
             <Menu className="menu" selectedKeys={[]} onClick={this.props.handleMenuClick}>
                 <Menu.Item key="clear">
                 <Icon type="user" />清理缓存
+                </Menu.Item>
+                <Menu.Item key="password">
+                <Icon type="setting" />修改密码
                 </Menu.Item>
                 {/* <Menu.Item disabled>
                 <Icon type="setting" />设置
@@ -88,6 +94,8 @@ class GHeader extends PureComponent {
                         <Spin size="small" style={{ marginLeft: 8 }} />
                     )}
                 </div>
+
+                
                 
             </div>
         );

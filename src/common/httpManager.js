@@ -38,11 +38,15 @@ const  httpManager = {
     dashboard:()=>http.get(`${host}/admin/dashboard`,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
 
     // common
-    getList : (model,page=1) => http.get(`${host}/admin/${model}?page=${page}`,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
+    getList : (model,page=1,extra='') => http.get(`${host}/admin/${model}?page=${page}&${extra}`,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
     get : (model,id) => http.get(`${host}/admin/${model}/${id}`,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
     create: (model,data) => http.post(`${host}/admin/${model}`,data,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
     delete: (model,id) => http.delete(`${host}/admin/${model}/${id}`,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }}),
-    update: (model,id,data) => http.put(`${host}/admin/${model}/${id}`,data,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }})
+    update: (model,id,data) => {   
+        console.log(id,data)
+        var url = `${host}/admin/${model}/${id}`;
+
+        return http.put(url,data,{headers: {'X-Custom-Header': 'y',"x-token": getToken() }})  }
 
     
 } 

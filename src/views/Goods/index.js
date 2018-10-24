@@ -1,6 +1,6 @@
 import React , {Fragment} from "react";
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Row,Col,Card,Form,Input,TreeSelect,Icon,Button,Upload,Switch,InputNumber,DatePicker,Modal,message,
+import {Row,Col,Card,Form,Input,TreeSelect,Icon,Button,Upload,Switch,Select,InputNumber,DatePicker,Modal,message,Cascader,
     Badge,Divider,Table
 } from 'antd';
 
@@ -207,9 +207,15 @@ class Goods extends React.Component {
         modalVisible: false,
         category:[],
         param_str:"",
-
+        search:{
+            keyword:"",
+            state:"",
+            category_id:""
+        },
         formType:1 , //1新增 2修改
         updateId:0  //修改id
+
+
     };
 
 
@@ -246,6 +252,7 @@ class Goods extends React.Component {
             o1.key = o.id;
             o1.value = o.id+"";
             o1.title = o.name;
+            o1.label = o.name;
             if(o.children && o.children.length>0){
                 var arr2 = [];
                 o.children.forEach(j =>{
@@ -253,6 +260,7 @@ class Goods extends React.Component {
                     j1.key = j.id;
                     j1.value = j.id+"";
                     j1.title = j.name;
+                    j1.label = j.name;
                     arr2.push(j1)
                 })
                 o1.children = arr2;
@@ -265,7 +273,18 @@ class Goods extends React.Component {
 
     //获取数据
     loadData = () => {
-        httpManager.getGoodsList(this.state.page,this.state.param_str).then((response) => {
+        
+        var param_str = "";
+        var param = this.state.search;
+        for(var k in param ){
+            var v = param[k];
+            if(param[k].length>0) {
+                if(k == "category_id") v = v[1];
+                param_str += k+"="+v+"&";
+            }
+        }
+        console.log(param_str)
+        httpManager.getGoodsList(this.state.page,param_str).then((response) => {
             if(!F.checkResponse(response)) return;
 
             this.setState({"listData":response.data.data.data,pageTotal:response.data.data.total});
@@ -386,19 +405,34 @@ class Goods extends React.Component {
             <PageHeaderLayout title="商品管理">
                 <Card bordered={false}>
                     <Row>
-                        <Col span={4}>
-                            <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields(); this.form.props.form.setFieldsValue({stock:"500",sort:"0",extra_1:"500g",extra_2:"冷藏",extra_3:"7天"}); } }>新建</Button>
-                        </Col>
-                        <Col span={20}>
-                            <Input.Search style={{width:'200px'}}
-                            placeholder="搜索"
-                            onSearch={(value) => {this.setState({param_str:"keyword="+value},()=> {
-                                this.loadData()
-                            }) }}
-                            enterButton
-                            />
-                        </Col>
+                        <Button icon="plus" type="primary" onClick={() => {this.handleModalVisible(true);this.setState({formType:1});this.form.props.form.resetFields(); this.form.props.form.setFieldsValue({stock:"500",sort:"0",extra_1:"500g",extra_2:"冷藏",extra_3:"7天"}); } }>新建</Button>
+                        
+                       
                     </Row>
+                    <div style={{height:"10px"}}></div>
+                    <Row>
+                        <Input.Group compact >
+                            <Input  style={{ width: '20%' }} placeholder="输入商品名称或skuId" value={this.state.search.keyword} onChange={(e)=>{
+                                this.setState({"search":Object.assign({}, this.state.search, {"keyword": e.target.value})  })
+                            }} />
+                            <Cascader style={{ width: '20%' }} options={this.state.category} placeholder="选择分类" value={this.state.search.category_id} onChange={ (value,selectedOption)=>{
+                                this.setState({"search":Object.assign({}, this.state.search, {"category_id": value})  })
+                            } }  />
+                            <Select  style={{ width: "20%" }}  placeholder="上下架" value={this.state.search.state} onChange={ (value,option)=>{
+                                this.setState({"search":Object.assign({}, this.state.search, {"state": value})  })
+                            } } >
+                                <Select.Option value="">全部状态</Select.Option>
+                                <Select.Option value="0">下架</Select.Option>
+                                <Select.Option value="1" >上架</Select.Option>
+                            </Select>
+                            <Button icon="search" type="primary" onClick={()=>{
+                                console.log(this.state.search)
+                                this.loadData()
+                            }} >搜索</Button>
+                        </Input.Group>
+                    </Row>
+                    <div style={{height:"10px"}}></div>
+
                     <Table
                         dataSource={this.state.listData}
                         columns={columns}

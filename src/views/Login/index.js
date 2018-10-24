@@ -71,7 +71,7 @@ const CreateForm = Form.create()(props => {
                     if(response.data.code == 0){
                         localStorage.setItem("user",JSON.stringify(response.data.data))
                         
-                        console.log(props)
+                        //console.log(props)
                         props.history.push("/dashboard")
                         
                         //window.location.href = "#/dashboard"
@@ -80,6 +80,8 @@ const CreateForm = Form.create()(props => {
                         //const {history} = props;
                         //history.replace("/dashboard")
                         //window.location="#/dashboard";
+                    }else{
+                        alert(response.data.message)
                     }
                     
                 });

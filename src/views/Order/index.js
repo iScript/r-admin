@@ -19,6 +19,7 @@ class Order extends React.Component {
         listData:[],
         page:1,
         pageTotal : 10,
+        param_str:"",
 
         modalVisible : false,
         orderDetail : {}
@@ -47,7 +48,7 @@ class Order extends React.Component {
 
     //获取数据
     loadData = () => {
-        httpManager.getList(xmodel,this.state.page).then((response) => {
+        httpManager.getList(xmodel,this.state.page,this.state.param_str).then((response) => {
             this.setState({"listData":response.data.data.data,pageTotal:response.data.data.total});
         })
     }
@@ -62,6 +63,9 @@ class Order extends React.Component {
         var orderDetail = record.address;
         orderDetail.order_id = record.order_id
         orderDetail.beizhu = record.extra1;
+        orderDetail.status = record.status;
+        orderDetail.status_text = record.status_text;
+        orderDetail.price = record.price;
         orderDetail.goodsList = JSON.parse(record.detail).data;
         console.log(orderDetail)
         this.setState({modalVisible: true,orderDetail:orderDetail});
@@ -134,6 +138,7 @@ class Order extends React.Component {
             <div>
                 <Modal title="订单详情"  visible={this.state.modalVisible}  onCancel={() => this.handleModalVisible()} onOk={() => this.handleModalVisible()}>
                     <p>订单id: {this.state.orderDetail.order_id }</p>
+                    <p>订单状态: {this.state.orderDetail.status_text }</p>
                     <p>联系人: {this.state.orderDetail.contact_name }</p>
                     <p>联系电话: {this.state.orderDetail.contact_number }</p>
                     <p>城市: {this.state.orderDetail.city}</p>
@@ -142,14 +147,29 @@ class Order extends React.Component {
                     <GoodsList list={this.state.orderDetail.goodsList } />
 
                     <Button  onClick={ ()=>{
+                        if(this.state.orderDetail.status <1){
+                            alert("未支付的订单不可打印");return;
+                        }
+
                         window.open("https://api2.mc8mc.com/admin/order/"+this.state.orderDetail.order_id+"/print?x-token="+this.getToken())
+                    
                     } } >打印小票</Button>
                 </Modal>
 
 
                 <PageHeaderLayout title="订单管理">
                     <Card bordered={false}>
-                        
+                        <Row>
+                        <Col span={20}>
+                            <Input.Search style={{width:'200px'}}
+                            placeholder="搜索"
+                            onSearch={(value) => {this.setState({param_str:"order_id="+value},()=> {
+                                this.loadData()
+                            }) }}
+                            enterButton
+                            />
+                        </Col>
+                        </Row>
                         <Table
                             dataSource={this.state.listData}
                             columns={columns}
